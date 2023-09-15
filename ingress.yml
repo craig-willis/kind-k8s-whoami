@@ -1,0 +1,53 @@
+apiVersion: v1
+kind: Secret
+metadata:
+ name: cloudflare-api-token-secret
+ namespace: whoami
+type: Opaque
+stringData:
+ api-token: <API Token>
+---
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+ name: le-example-dns
+ namespace: whoami
+spec:
+ acme:
+   email: cawillis@gmail.com
+   # We use the staging server here for testing to avoid hitting
+   server: https://acme-staging-v02.api.letsencrypt.org/directory
+   privateKeySecretRef:
+     # if not existing, it will register a new account and stores it
+     name: example-issuer-account-key
+   solvers:
+     - dns01:
+         cloudflare:
+           apiTokenSecretRef:
+             name: cloudflare-api-token-secret
+             key: api-token
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+ name: whoami
+ namespace: whoami
+ annotations:
+   cert-manager.io/issuer: "le-example-dns"
+spec:
+ tls:
+   - hosts:
+       - whoami.k8s.coldframe.org
+     secretName: tls-whoami-ingress-dns
+ rules:
+   - host: whoami.k8s.coldframe.org
+     http:
+       paths:
+         - path: /
+           pathType: Prefix
+           backend:
+             service:
+               name: whoami
+               port:
+                 name: web

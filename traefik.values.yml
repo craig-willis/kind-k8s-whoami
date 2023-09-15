@@ -1,0 +1,9 @@
+image:
+  name: traefik
+service:
+  type: NodePort
+ports:
+  web:
+    nodePort: 30000
+  websecure:
+    nodePort: 30001
