@@ -1,8 +1,8 @@
-#
+# Kind + Cert-Manager + Traefik
 This example is based on traefiklabs' [Secure Web Applications with Traefik Proxy, cert-manager, and Let’s Encrypt](https://traefik.io/blog/secure-web-applications-with-traefik-proxy-cert-manager-and-lets-encrypt/). The main change is configuring `NodePort` on the Traefik service to expose it on the server.
 
 
-# Using Cloudflare
+## Using Cloudflare
 
 This example uses Cloudflare.  
 
@@ -18,7 +18,7 @@ Create an API token, per the [cert-manager docs](https://cert-manager.io/docs/co
 * Save and note your API key
 
 
-# To deploy 
+## To deploy 
 
 * `kindnodes.yml` from the `wt-k8s` repo
 * Deploy Traefik with `NodePort` via `traefik.values.yml`
